@@ -2,12 +2,13 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
-//Grabbing references to important DOM elements.
+// Grabbing references to important DOM elements.
 let modalDisplayEl = $('#modal');
 let taskFormEl = $('#formModal');
 let taskNameEl = $('#task-name-input');
 let taskDescriptionEl = $('#task-description-input');
 let taskDueDateEl = $('#task-due-date-input');
+let toDoCards = $('#todo-cards')
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
@@ -24,22 +25,21 @@ function generateTaskId() {
             taskId = uniqueTaskId;
         }
     }
-    return taskId + 1;
+
+    const newTaskId = taskId + 1;
+    return newTaskId;
 }
-
-generateTaskId();
-
-console.log(generateTaskId());
 
 // Todo: create a function to create a task card
 // Creates a task card from the information passed in 'task' parameter and returns it.
 function createTaskCard(task) {
+    // Create a variable and grab the DOM to create new elements for each part of the task card.
     const taskCard = $('<div>')
         .addClass('card project-card draggable my-3')
         .attr('data-project-id', task.id);
     const cardHeader = $('<div>').addClass('card-header h4').text(task.name);
     const cardBody = $('<div>').addClass('card-boy');
-    const cardDescription = $('<p>').addClass(card-text).text(task.type);
+    const cardDescription = $('<p>').addClass('card-text').text(task.type);
     const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate);
     const cardDeleteBtn = $('<button>')
         .addClass('btn btn-danger delete')
@@ -47,6 +47,7 @@ function createTaskCard(task) {
         .attr('data-project-id', task.id);
     cardDeleteBtn.on('click', handleDeleteTask);
 
+    // Create a warning and danger color for cards that are due today or overdue.
     if (task.dueDate && task.status !== 'done') {
         const now = dayjs();
         const taskDueDate = dayjs(task.dueDate, 'MM/DD/YYYY');
@@ -65,24 +66,49 @@ function createTaskCard(task) {
     return taskCard;
 }
 
-createTaskCard();
-
-console.log(createTaskCard());
-
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
-    for (let i = 0; i < array.length; i++) {
-        const nextTaskListItem = taskList [i];
-        
+    for (let i = 0; i < tempList.length; i++) {
+        const nextTaskListItem = tempList[i];
+        const newTaskCards = createTaskCard(nextTaskListItem);
+        // Make cards draggable with jQuery
+        newTaskCards.draggable();
+        // Append new tasks to the to-do column
+        toDoCards.append(newTaskCards);
     }
-
 }
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
-    taskFormEl.on('click', createTaskCard());
+    // Preventing the default page reload when form submits.
+    event.preventDefault();
 
+    // Using jQuery val function to get the user input values and apply to a new varibale.
+    let taskNameInput = taskNameEl.val();
+    let taskDescriptionInput = taskDescriptionEl.val();
+    let taskDueDateInput = taskDueDateEl.val();
+
+    // Creating the new task object.
+    let newTask = {
+        id: generateTaskId(),
+        name: taskNameInput,
+        type: taskDescriptionInput,
+        dueDate: taskDueDateInput,
+        status: 'to-do'
+    }
+
+    // Adding the new task card.
+    const newTaskCard = createTaskCard(newTask);
+    newTaskCard.draggable();
+    toDoCards.append(newTaskCard);
+
+    // Reset form fields
+    taskNameEl.val('');
+    taskDescriptionEl.val('');
+    taskDueDateEl.val('');
 }
+
+taskFormEl.on('submit', handleAddTask);
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
