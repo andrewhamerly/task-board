@@ -171,7 +171,6 @@ function handleDrop(event, ui) {
     const taskList = readTasksFromStorage();
 
     // Get the task id from the event
-    //let taskId = ui.draggable[0].dataset.taskId; // Provided in Module 5 Mini-Project Example
     let taskId = ui.draggable.attr('data-task-id');
 
     // Get the id of the lane card was dropped
@@ -199,9 +198,6 @@ $(document).ready(function () {
 
     // Form submit button event listener to run function handleAddTask()
     taskFormEl.on('submit', handleAddTask);
-
-    // Event listener for the delete button for each task.
-    $('#todo-cards, #in-progress-cards, #done-cards').on('click', '.delete', handleDeleteTask);
 
     // Make the class lane droppable for each status column.
     $('.lane').droppable({
