@@ -14,9 +14,9 @@ git clone git@github.com:andrewhamerly/task-board.git
 This can be used to record and store task items in localStorage that can be updated in a kanban style board from to-do to in-progress to done and ultimately deleted.
 
 Link to deployed application:
-[Blog](https://andrewhamerly.github.io/task-board/)
+[Task Boad](https://andrewhamerly.github.io/task-board/)
 
-![Blog Example Image](./assets/images/task-board.png)
+![Task Board Example Image](./assets/images/task-board.png)
 
 ## Credits
 Module 5 Mini Project helped me to reverse engineer many aspects of this app including the function to create cards and function for handleDeleteTask.
